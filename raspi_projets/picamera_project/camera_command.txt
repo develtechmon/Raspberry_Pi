@@ -1,0 +1,11 @@
+-------------IMAGES-------------------
+raspistill -o test.jpg --Take photo only
+raspistill -t 15000 -o newpic.jpg --Take photo with delay of 15 Seconds
+raspistill -rot 180 -o test.jpg -- Rotate angle
+
+------------VIDEO-------------------
+raspivid -t 10000 -o testvideo.h264 -- Take Video for 5 Seconds at 1920x1800
+raspivid -w 640 -h 480 -fps 90 -t 10000 -o test90fps.h264 -- Take video 10 seconds.Slow down video at 640x480
+
+------------PREVIEW MODE-----------
+raspistill -o image.jpg -p 20,100,1280,720 -- Using -p switch, we can set windows on screen position along with its h and w. The -p take 4 parameters x,y,w,h

@@ -1,0 +1,38 @@
+//To find the IP addres
+ifconfig
+
+//To shutdown
+sudo shutdown -h now
+
+//Configure settings
+sudo raspi-config
+
+//To determine the pinout GPIOs
+pinout
+
+//Searches the exact name of package
+apt-cache search <search term>
+
+//Version & depedencies
+apt-cache showpkg <package name>s
+
+//Refer to this link to find more details of apt
+itsfoss.com/apt-get-linux-guide/
+
+//Raspberry Setting
+sudo raspi-config
+
+//Crontab to insert the script
+1. crontab -e
+2. @reboot sudo pigpiod
+3. @reboot sudi python <script location>
+
+//Use this when Fetch is fail to FETCH
+apt-get -o Acquire::ForceIPv4=true update
+apt-get -o Acquire::ForceIPv4=true -y dist-upgrade
+
+//Use this to uninstall OPenCV
+sudo pip3 uninstall opencv-python
+
+//Install Previous Version of opencv
+pip install opencv-contrib-python==4.1.0.25
