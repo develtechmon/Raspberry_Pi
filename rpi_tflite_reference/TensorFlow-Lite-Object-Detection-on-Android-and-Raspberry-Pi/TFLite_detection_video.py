@@ -24,12 +24,12 @@ import importlib.util
 
 # Define and parse input arguments
 parser = argparse.ArgumentParser()
-#parser.add_argument('--modeldir', help='Folder the .tflite file is located in',
-#                    required=True)
-#parser.add_argument('--graph', help='Name of the .tflite file, if different than detect.tflite',
-#                    default='detect.tflite')
-#parser.add_argument('--labels', help='Name of the labelmap file, if different than labelmap.txt',
-#                    default='labelmap.txt')
+parser.add_argument('--modeldir', help='Folder the .tflite file is located in',
+                    required=True)
+parser.add_argument('--graph', help='Name of the .tflite file, if different than detect.tflite',
+                    default='detect.tflite')
+parser.add_argument('--labels', help='Name of the labelmap file, if different than labelmap.txt',
+                    default='labelmap.txt')
 parser.add_argument('--threshold', help='Minimum confidence threshold for displaying detected objects',
                     default=0.5)
 parser.add_argument('--video', help='Name of the video file',
@@ -39,15 +39,9 @@ parser.add_argument('--edgetpu', help='Use Coral Edge TPU Accelerator to speed u
 
 args = parser.parse_args()
 
-#MODEL_NAME = args.modeldir
-MODEL_NAME ='Sample_TFLite_mode'
-
-#GRAPH_NAME = args.graph
-GRAPH_NAME = 'detect.tflite'
-
-#LABELMAP_NAME = args.labels
-LABELMAP_NAME = 'labelmap.txt'
-
+MODEL_NAME = args.modeldir
+GRAPH_NAME = args.graph
+LABELMAP_NAME = args.labels
 VIDEO_NAME = args.video
 min_conf_threshold = float(args.threshold)
 use_TPU = args.edgetpu
@@ -72,19 +66,16 @@ if use_TPU:
         GRAPH_NAME = 'edgetpu.tflite'   
 
 # Get path to current working directory
-#CWD_PATH = os.getcwd()
-CWD_PATH = '/home/pi/Desktop/Project/machine_learning/tflite1/Sample_TFLite_model/'
+CWD_PATH = os.getcwd()
 
 # Path to video file
 VIDEO_PATH = os.path.join(CWD_PATH,VIDEO_NAME)
 
 # Path to .tflite file, which contains the model that is used for object detection
-#PATH_TO_CKPT = os.path.join(CWD_PATH,MODEL_NAME,GRAPH_NAME)
-PATH_TO_CKPT = os.path.join(CWD_PATH,GRAPH_NAME)
+PATH_TO_CKPT = os.path.join(CWD_PATH,MODEL_NAME,GRAPH_NAME)
 
 # Path to label map file
-#PATH_TO_LABELS = os.path.join(CWD_PATH,MODEL_NAME,LABELMAP_NAME)
-PATH_TO_LABELS = os.path.join(CWD_PATH,LABELMAP_NAME)
+PATH_TO_LABELS = os.path.join(CWD_PATH,MODEL_NAME,LABELMAP_NAME)
 
 # Load the label map
 with open(PATH_TO_LABELS, 'r') as f:
@@ -118,6 +109,15 @@ floating_model = (input_details[0]['dtype'] == np.float32)
 input_mean = 127.5
 input_std = 127.5
 
+# Check output layer name to determine if this model was created with TF2 or TF1,
+# because outputs are ordered differently for TF2 and TF1 models
+outname = output_details[0]['name']
+
+if ('StatefulPartitionedCall' in outname): # This is a TF2 model
+    boxes_idx, classes_idx, scores_idx = 1, 3, 0
+else: # This is a TF1 model
+    boxes_idx, classes_idx, scores_idx = 0, 1, 2
+
 # Open video file
 video = cv2.VideoCapture(VIDEO_PATH)
 imW = video.get(cv2.CAP_PROP_FRAME_WIDTH)
@@ -143,10 +143,9 @@ while(video.isOpened()):
     interpreter.invoke()
 
     # Retrieve detection results
-    boxes = interpreter.get_tensor(output_details[0]['index'])[0] # Bounding box coordinates of detected objects
-    classes = interpreter.get_tensor(output_details[1]['index'])[0] # Class index of detected objects
-    scores = interpreter.get_tensor(output_details[2]['index'])[0] # Confidence of detected objects
-    #num = interpreter.get_tensor(output_details[3]['index'])[0]  # Total number of detected objects (inaccurate and not needed)
+    boxes = interpreter.get_tensor(output_details[boxes_idx]['index'])[0] # Bounding box coordinates of detected objects
+    classes = interpreter.get_tensor(output_details[classes_idx]['index'])[0] # Class index of detected objects
+    scores = interpreter.get_tensor(output_details[scores_idx]['index'])[0] # Confidence of detected objects
 
     # Loop over all detections and draw detection box if confidence is above minimum threshold
     for i in range(len(scores)):
@@ -179,4 +178,3 @@ while(video.isOpened()):
 # Clean up
 video.release()
 cv2.destroyAllWindows()
-
