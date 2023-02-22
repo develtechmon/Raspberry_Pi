@@ -1,5 +1,5 @@
 # This is userguide on how to install OpenCV in Raspberry Pi
-# Refer to this link for comprehensive guide. This is the best userguide i found.
+## Refer to this link for comprehensive guide. This is the best userguide i found.
 
 Link:
 https://singleboardblog.com/install-python-opencv-on-raspberry-pi/
@@ -12,24 +12,24 @@ Please refer to above link to find available packages, versions and compatabilit
 opencv-contrib-python
 
 To install openCV for Pi 3, Pi 4 and Pi Zero 2W.
-1. sudo apt update
-2. pip install --upgrade pip setuptools wheel
-3. sudo apt-get install -y libhdf5-dev libhdf5-serial-dev python3-pyqt5 libatlas-base-dev libjasper-dev
-4. python3 -V
-5. pip3 -V
+- > sudo apt update
+- > pip install --upgrade pip setuptools wheel
+- > sudo apt-get install -y libhdf5-dev libhdf5-serial-dev python3-pyqt5 libatlas-base-dev libjasper-dev
+- > python3 -V
+- > pip3 -V
 
-Note : Below is for Rpi 4
-6. pip install opencv-contrib-python==4.5.5.62
+## Note : Below is for Rpi 4
+- > pip install opencv-contrib-python==4.5.5.62
 
-Note : Below is for Rpi zero 2
-6. pip install opencv-python==4.5.3.56
-7. Later you will see ImportError: numpy.core.multiarray failed to import error. To solve this error, we need to upgrade numpy as follow
-8. pip install -U numpy
+## Note : Below is for Rpi zero 2
+- > pip install opencv-python==4.5.3.56
+- > Later you will see ImportError: numpy.core.multiarray failed to import error. To solve this error, we need to upgrade numpy as follow
+- > pip install -U numpy
 
-Check your installations
-1. python3
-2. import cv2
-3. cv2.__version__
-4. exit()
+## Check your installations
+- > python3
+- > import cv2
+- > cv2.__version__
+- > exit()
 
 
