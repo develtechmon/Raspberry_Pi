@@ -17,7 +17,14 @@ To install openCV for Pi 3, Pi 4 and Pi Zero 2W.
 3. sudo apt-get install -y libhdf5-dev libhdf5-serial-dev python3-pyqt5 libatlas-base-dev libjasper-dev
 4. python3 -V
 5. pip3 -V
+
+Note : Below is for Rpi 4
 6. pip install opencv-contrib-python==4.5.5.62
+
+Note : Below is for Rpi zero 2
+6. pip install opencv-python==4.5.3.56
+7. Later you will see ImportError: numpy.core.multiarray failed to import error. To solve this error, we need to upgrade numpy as follow
+8. pip install -U numpy
 
 Check your installations
 1. python3
