@@ -8,9 +8,9 @@ from threading import Thread
 import importlib.util
 from picamera2 import Picamera2
 
-class WebcamVideoStream:
-    def __init__(self, src=0,name="WebcamVideoStream"):   
-    #def __init__(self, cam,name="WebcamVideoStream"):         
+class RpiVideoStream:
+    def __init__(self, src=0,name="RpiVideoStream"):   
+    #def __init__(self, cam,name="RpiVideoStream"):         
         self.picam2 = Picamera2()
         self.picam2.configure(self.picam2.create_preview_configuration(main={"format": 'XRGB8888', "size": (640, 480)}))
         self.picam2.start() 
@@ -45,8 +45,8 @@ class WebcamVideoStream:
 #picam2.start() 
               
 if __name__ == "__main__":
-    stream = WebcamVideoStream(src=0).start()  # default camera
-    #stream = WebcamVideoStream(picam2).start()  # default camera
+    stream = RpiVideoStream(src=0).start()  # default camera
+    #stream = RpiVideoStream(picam2).start()  # default camera
       
     time.sleep(1)
     while True:
