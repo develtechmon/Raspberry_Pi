@@ -1,3 +1,12 @@
+'''
+Install following Python library 
+sudo pip3 install adafruit-circuitpython-vl53l0x
+
+See below Link
+https://learn.adafruit.com/adafruit-vl53l0x-micro-lidar-distance-sensor-breakout/python-circuitpython
+
+'''
+
 import time
 
 import board
