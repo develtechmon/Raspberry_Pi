@@ -3,14 +3,16 @@
 import rospy
 import cv2
 from sensor_msgs.msg import Image
-from cv_bridge import CvBridge
-from threading import Thread
+from cv_bridge import CvBridge, CvBridgeError
+from threading import Thread, Lock
 
 class WebcamVideoStream:
     def __init__(self, src=0, name="WebcamVideoStream"):
         self.stream = cv2.VideoCapture(src)
         self.name = name
         self.stopped = False
+        self.frame = None
+        self.lock = Lock()  # Thread safety lock
 
     def start(self):
         t = Thread(target=self.update, name=self.name, args=())
@@ -21,11 +23,16 @@ class WebcamVideoStream:
     def update(self):
         while True:
             if self.stopped:
+                self.stream.release()
                 return
-            (self.grabbed, self.frame) = self.stream.read()
+            grabbed, frame = self.stream.read()
+            if grabbed:
+                with self.lock:
+                    self.frame = frame
 
     def read(self):
-        return self.frame
+        with self.lock:
+            return self.frame
 
     def stop(self):
         self.stopped = True
